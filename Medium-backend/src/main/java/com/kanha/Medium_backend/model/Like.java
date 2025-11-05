@@ -1,5 +1,6 @@
 package com.kanha.Medium_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -19,10 +20,12 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
+    @JsonIgnore
     private Article article;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     private LocalDateTime createdAt = LocalDateTime.now();
