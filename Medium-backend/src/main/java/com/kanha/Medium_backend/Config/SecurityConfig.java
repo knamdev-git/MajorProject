@@ -37,9 +37,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
-                request -> request.requestMatchers("/article/get")
-                        .permitAll().anyRequest()
-                        .authenticated())
+                        request -> request.requestMatchers("/article/get")
+                                .permitAll().anyRequest()
+                                .authenticated())
                 .httpBasic(Customizer.withDefaults());
 
 //        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
     //we want that our authentication provider should be our own customised not default
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
 
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());

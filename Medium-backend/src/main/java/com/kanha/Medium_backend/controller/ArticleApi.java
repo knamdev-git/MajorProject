@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/article")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ArticleApi {
 
     @Autowired
