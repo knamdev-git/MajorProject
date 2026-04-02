@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data //for getter and setter
+@NoArgsConstructor //for no arg constructor
+@AllArgsConstructor // for all arguments constructor
 @Table(name = "Users")
 public class User {
 

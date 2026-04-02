@@ -24,12 +24,9 @@ public class UserService {
 
 
     //getting the user by it's id
-    public ResponseEntity<User> getProfileById(UUID id){
-        User user = userRepo.findById(id).orElse(null);
-        if(user != null)
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
-        else
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+    public User getProfileById(UUID id){
+        return userRepo.findById(id).orElse(null);
+//        return user;
     }
 
     //getting all the users

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/article")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ArticleApi {
 
     @Autowired
@@ -31,7 +33,7 @@ public class ArticleApi {
     }
 
     //user make changes in their article
-
+    //update articles
     @PreAuthorize("hasAuthority('USERS')")
     @PutMapping("{id}")
     public ResponseEntity<?> editArticle(@PathVariable UUID id, @RequestBody Article article){
