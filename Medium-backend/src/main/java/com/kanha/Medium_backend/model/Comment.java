@@ -1,6 +1,5 @@
 package com.kanha.Medium_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +17,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;

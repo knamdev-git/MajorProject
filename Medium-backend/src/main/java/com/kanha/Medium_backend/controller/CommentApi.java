@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/comments")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CommentApi {
 
     @Autowired
@@ -36,7 +37,7 @@ public class CommentApi {
         return ResponseEntity.ok(commentService.addComment(articleId, userId, content, parentCommentId).getStatusCode());
     }
 
-    //get all the comments of specific user
+    //get all the comments of specific user by article Id
 
     @GetMapping("/{articleId}")
     public ResponseEntity<List<Comment>> getCommentsOfSpecificUser(@PathVariable UUID articleId){

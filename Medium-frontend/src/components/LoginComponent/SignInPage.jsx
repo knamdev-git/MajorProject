@@ -1,6 +1,58 @@
 import {Link} from "react-router-dom";
+import React, {useState} from "react";
+import {toast} from "react-toastify";
 
 const SignInPage = () => {
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+
+    const [errors, setErrors] = useState({});
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // Email length & structural checks (Entity limit: nullable = false, length = 100)
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (formData.email.length > 100) {
+            newErrors.email = 'Email cannot exceed 100 characters';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Please provide a valid email format';
+        }
+
+        // Password length validation
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        //to verify all the credentials first is the email is correct or not
+        if(validateForm()){ //validate -> return true or false
+            console.log("All the credentials are correct");
+            //after successful validation we will send the login request to the controller service
+
+        }else{
+            toast.error("Invalid Credentials");
+        }
+    }
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData(prevState => ({...prevState, [name] : value}));
+
+        if(errors[name]){
+            setErrors((prevState) => ({...prevState, [name] : ''}));
+        }
+    }
+
     return (
         <div className="flex min-h-screen items-center justify-center  text-[#eeeeef] font-sans antialiased">
             {/* Main Card Container */}
@@ -47,7 +99,7 @@ const SignInPage = () => {
                 </div>
 
                 {/* Standard Form Section */}
-                <form className="mt-6" onSubmit={(e) => e.preventDefault()}>
+                <form className="mt-6" onSubmit={handleSubmit}>
                     <div className="flex items-center justify-between">
                         <label className="text-xs font-medium text-[#eeeeef]">
                             Email address
@@ -55,17 +107,45 @@ const SignInPage = () => {
                         <button type="button" className="text-xs font-medium text-[#b5b5be] hover:underline cursor-pointer">
                             Use phone
                         </button>
-                    </div>
 
+                    </div>
                     <input
                         type="email"
+                        name="email"
                         placeholder="Enter your email address"
-                        className="mt-2 w-full rounded-md border border-[#2e2e33] bg-[#131316] px-3 py-2 text-sm text-white placeholder-[#62626a] outline-none transition focus:border-white"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`mt-2 w-full rounded-md border border-[#2e2e33] bg-[#131316] px-3 py-2 text-sm text-white placeholder-[#62626a] outline-none transition focus:border-white
+                         ${errors.email
+                            ? 'border-red-400 focus:border-red-500 bg-red-50/20'
+                            : 'border-gray-200 bg-black/70 focus:border-gray-400'
+                        }`}
                     />
+                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+
+
+                    <div className="flex items-center justify-between">
+                        <label className="text-xs font-medium text-[#eeeeef] mt-3">
+                            Password
+                        </label>
+                    </div>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className={`mt-2 w-full rounded-md border border-[#2e2e33] bg-[#131316] px-3 py-2 text-sm text-white placeholder-[#62626a] outline-none transition focus:border-white ${
+                            errors.password
+                            ? 'border-red-400 focus:border-red-500 bg-red-50/20'
+                            : 'border-gray-200 bg-black/70 focus:border-gray-400'
+                        }`}
+                    />
+                    {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
 
                     <button
                         type="submit"
-                        className="mt-6 flex w-full items-center justify-center gap-1 rounded-md bg-white py-2 text-sm font-semibold text-black transition hover:bg-neutral-200"
+                        className="cursor-pointer mt-6 flex w-full items-center justify-center gap-1 rounded-md bg-white py-2 text-sm font-semibold text-black transition hover:bg-neutral-200"
                     >
                         Continue
                         {/* Minimal Right Arrow icon */}

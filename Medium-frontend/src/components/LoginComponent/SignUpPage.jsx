@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {registerUserService} from "../../services/AuthServices.jsx";
+import {toast} from "react-toastify";
 
 export default function SignUpPage() {
     // Frontend state for capturing input fields
@@ -12,6 +14,7 @@ export default function SignUpPage() {
     // Local state for UI feedback and validation rules
     const [errors, setErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const navigate = useNavigate();
 
     // Updates form field state on user keystroke
     const handleChange = (e) => {
@@ -47,7 +50,7 @@ export default function SignUpPage() {
         // Password length validation (Entity limit: length = 8)
         if (!formData.password) {
             newErrors.password = 'Password is required';
-        } else if (formData.password.length !== 8) {
+        } else if (formData.password.length < 8 && formData.password.length < 200 ) {
             newErrors.password = 'Password must be exactly 8 characters long';
         }
 
@@ -56,16 +59,24 @@ export default function SignUpPage() {
     };
 
     // Process standard form action intercept
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log(e.target.value);
         if (validateForm()) {
-            setIsSubmitted(true);
             console.log('Valid registration object ready for transmission:', formData);
-            // Data object keys map cleanly to backend requirements:
-            // { username: "...", email: "...", password: "..." }
+            try {
+                const response = await registerUserService(formData);
+                console.log(response.data);
+                toast.success("Registration Successful!");
+                setIsSubmitted(true);
+                navigate("/loginPage", { replace: true });
+            } catch (error) {
+                toast.error("User Already Exists ! Please Login"+error.response?.data);
+            }
         } else {
             setIsSubmitted(false);
+            toast.error("Invalid Credentials !");
         }
     };
 
@@ -171,7 +182,7 @@ export default function SignUpPage() {
                         {/* Form Submission Action Target */}
                         <button
                             type="submit"
-                            className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl bg-gray-900 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-gray-800 active:scale-[0.99]"
+                            className="cursor-pointer mt-2 flex w-full items-center justify-center gap-1 rounded-xl bg-gray-900 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-gray-800 active:scale-[0.99]"
                         >
                             Create Account
                             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>

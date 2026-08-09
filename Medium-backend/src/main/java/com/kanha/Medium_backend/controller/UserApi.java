@@ -5,6 +5,7 @@ import com.kanha.Medium_backend.model.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserApi {
 
     @PostConstruct
@@ -56,8 +58,13 @@ public class UserApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("profile")
-    public ResponseEntity<?> addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        User resultantUser = userService.addUser(user);
+        if(resultantUser != null){
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

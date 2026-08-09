@@ -9,7 +9,7 @@ const Header = ({ theme, setTheme }) => {
 
   return (
     <div className='bg-emerald-600 flex justify-between p-2 '>
-      <h1 className='font-bold text-xl text-white'>MediumClone</h1>
+      <Link to={"/home"}><h1 className='font-bold text-3xl text-white hover:text-green-100'>ArtiPod</h1></Link>
       <div className="navigations flex justify-between space-x-4">
         <Link to="/home">Home</Link >
         <Link to='/about'>About</Link >

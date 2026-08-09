@@ -50,9 +50,7 @@ public class UserService {
            user1.setUsername(user.getUsername());
            user1.setEmail(user.getEmail());
            user1.setPassword(user.getPassword());
-           user1.setCreated_at(LocalDateTime.now());
            user1.setRole(user.getRole());
-           user1.set_verified(true);
        }
         try {
             userRepo.save(user1);
@@ -62,13 +60,19 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> addUser(User user) {
-        try {
-            userRepo.save(user);
-            return new ResponseEntity<>("Added to the repo through service", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Please Fill proper data", HttpStatus.BAD_REQUEST);
-        }
+    public User addUser(User user) {
+            if(userRepo.existsByUsername(user.getUsername())){
+                System.out.println("Username already exists");
+                return null;
+            }
+
+            if(userRepo.existsByEmail(user.getEmail())){
+                System.out.println("Email already exists in the server");
+                return null;
+            }
+
+            User savedUser = userRepo.save(user);
+            return savedUser;
     }
 
     //to delete the user

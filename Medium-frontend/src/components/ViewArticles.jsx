@@ -18,6 +18,8 @@ const ViewArticles = () => {
       .catch((error) => {
         console.log("Error while getting the articles");
       });
+
+
   }, []);
 
   return (
@@ -29,7 +31,7 @@ const ViewArticles = () => {
 
       {articles.map((elem, idx) => (
           <div key={idx}>
-            <ListComponent user={elem.id} title={elem.title} description={elem.content} likes={elem.likes} comments={elem.comments} />
+            <ListComponent user={elem.id} title={elem.title} description={elem.content} likes={elem.likes.length} comments={elem.comments} />
           </div>
       ))}
     </div>

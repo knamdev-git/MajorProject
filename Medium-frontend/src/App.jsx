@@ -10,6 +10,7 @@ import Home from './components/Home'
 import NotFound from './components/404/NotFound'
 import SignInPage from "./components/LoginComponent/SignInPage.jsx";
 import SignUpPage from "./components/LoginComponent/SignUpPage.jsx";
+import {ToastContainer} from "react-toastify";
 
 const App = () => {
     const [theme, setTheme] = useState("bg-light text-black");
@@ -22,7 +23,6 @@ const App = () => {
                 <Routes>
                     {/* Default route */}
                     <Route path="/" element={<Navigate to={'/home'} />} />
-
                     <Route path='/home' element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
@@ -33,7 +33,11 @@ const App = () => {
 
                     <Route path='*' element={<NotFound />} />
                 </Routes>
-
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    theme="colored"
+                />
                 
             </div>
         </>

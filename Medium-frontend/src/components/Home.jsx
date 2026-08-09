@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {getArticleService} from "../services/ArticleServices.jsx";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {openArticleDetails} from "./listComponent/ListComponent.jsx";
 
 function Home() {
 
@@ -56,7 +57,7 @@ function Home() {
       </section>
 
       {/* Featured Articles Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-gray-50 ">
         <div className="max-w-6xl mx-auto">
           {/* Section Title */}
           <div className="text-center mb-12">
@@ -70,11 +71,12 @@ function Home() {
 
           {/* Articles Grid */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
             {articles.map((article) => (
               <div 
                 key={article.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300"
+                className="active: scale-95 border-t-2 cursor-pointer rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300"
+                onClick={() => {openArticleDetails(article.id)}}
               >
                 {/* Article Image */}
                 <img 
@@ -136,7 +138,7 @@ function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {/* Stat 1 */}
             <div>
-              <h3 className="text-4xl font-bold text-blue-600 mb-2">500+</h3>
+              <Link to={"/getArticles"}><h3 className="text-4xl font-bold text-blue-600 mb-2">500+</h3></Link>
               <p className="text-gray-600 text-lg">Articles Published</p>
             </div>
             

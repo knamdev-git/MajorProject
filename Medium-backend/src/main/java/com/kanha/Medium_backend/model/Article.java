@@ -1,6 +1,7 @@
 package com.kanha.Medium_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +42,13 @@ public class Article {
     )
     private List<Tag> tags;
 
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Comment> comments;
 
     @Column(updatable = false)
     private LocalDateTime created_at;

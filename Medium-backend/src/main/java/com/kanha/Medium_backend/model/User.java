@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Data //for getter and setter
+@Data
 @NoArgsConstructor //for no arg constructor
 @AllArgsConstructor // for all arguments constructor
 @Table(name = "Users")
@@ -30,8 +30,7 @@ public class User {
     private String email;
 
 
-    @Column(nullable = false, length = 8)
-
+    @Column(nullable = false)
     private String password;
 
     private boolean is_verified = false;
@@ -47,6 +46,8 @@ public class User {
     @Column(updatable = false)
     private LocalDateTime created_at;
 
+    //we can also use INSTANT Keyword here to handle the values to this variables automatically \
+    //ex : private Instant updated_at = Instant.now();
     private LocalDateTime updated_at;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
