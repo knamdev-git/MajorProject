@@ -1,26 +1,28 @@
-import {Link} from "react-router-dom";
+import {data, Link, useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 import {toast} from "react-toastify";
+import {loginUserService} from "../../services/AuthServices.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
 
 const SignInPage = () => {
 
     const [formData, setFormData] = useState({
-        email: '',
+        username : '',
         password: '',
     });
 
+    //using authcontext here
+    const { setUser } = useAuth();
+
     const [errors, setErrors] = useState({});
+    const navigate = useNavigate();
 
     const validateForm = () => {
         const newErrors = {};
 
-        // Email length & structural checks (Entity limit: nullable = false, length = 100)
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (formData.email.length > 100) {
-            newErrors.email = 'Email cannot exceed 100 characters';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Please provide a valid email format';
+        //for username should not be null
+        if(formData.username.length === 0){
+            newErrors.username = 'Username can\'t be null';
         }
 
         // Password length validation
@@ -32,15 +34,35 @@ const SignInPage = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        //to verify all the credentials first is the email is correct or not
-        if(validateForm()){ //validate -> return true or false
-            console.log("All the credentials are correct");
-            //after successful validation we will send the login request to the controller service
 
+        if(validateForm()){ //validate -> return true or false
+            console.log("All the credentials are correct in form now hitting the controller service", formData);
+
+            try {
+                const result = await loginUserService(formData);
+                if(result.status === 200){
+                    const user = result.data;
+                    console.log("User found by hitting controller -> " , user);
+
+                    toast.success("Logged in Successfully")
+                    setUser(user);
+                    navigate('/home');
+                }else{
+                    toast.error("Something went wrong")
+                }
+            }catch (e) {
+                if(e.response?.status === 404){
+                    toast.error("Wrong Username or Password");
+                }else  if(e.response?.status === 401){
+                    toast.error("Wrong Username or Password");
+                }else{
+                    toast.error("Something went wrong")
+                }
+            }
         }else{
-            toast.error("Invalid Credentials");
+            toast.error("Invalid credentials");
         }
     }
 
@@ -102,26 +124,26 @@ const SignInPage = () => {
                 <form className="mt-6" onSubmit={handleSubmit}>
                     <div className="flex items-center justify-between">
                         <label className="text-xs font-medium text-[#eeeeef]">
-                            Email address
+                            Username
                         </label>
                         <button type="button" className="text-xs font-medium text-[#b5b5be] hover:underline cursor-pointer">
-                            Use phone
+                            use Phone
                         </button>
 
                     </div>
                     <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email address"
-                        value={formData.email}
+                        type="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        value={formData.username}
                         onChange={handleChange}
                         className={`mt-2 w-full rounded-md border border-[#2e2e33] bg-[#131316] px-3 py-2 text-sm text-white placeholder-[#62626a] outline-none transition focus:border-white
-                         ${errors.email
+                         ${errors.username
                             ? 'border-red-400 focus:border-red-500 bg-red-50/20'
                             : 'border-gray-200 bg-black/70 focus:border-gray-400'
                         }`}
                     />
-                    {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                    {errors.username && <p className="mt-1 text-xs text-red-500">{errors.username}</p>}
 
 
                     <div className="flex items-center justify-between">

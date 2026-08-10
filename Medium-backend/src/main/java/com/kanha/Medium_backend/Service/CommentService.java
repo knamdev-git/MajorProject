@@ -3,10 +3,8 @@ package com.kanha.Medium_backend.Service;
 import com.kanha.Medium_backend.Repository.ArticleRepo;
 import com.kanha.Medium_backend.Repository.CommentRepo;
 import com.kanha.Medium_backend.Repository.UserRepo;
-import com.kanha.Medium_backend.model.Article;
-import com.kanha.Medium_backend.model.Comment;
-import com.kanha.Medium_backend.model.Role;
-import com.kanha.Medium_backend.model.User;
+import com.kanha.Medium_backend.Service.Implements.AuthServiceImpl;
+import com.kanha.Medium_backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,7 @@ import java.util.UUID;
 public class CommentService {
 
     @Autowired
-    AuthService authService;
+    AuthServiceImpl authServiceImpl;
 
     @Autowired
     ArticleRepo articleRepo;
@@ -33,7 +31,7 @@ public class CommentService {
     //adding the comment
 
     public ResponseEntity<Comment> addComment(UUID articleId, UUID userId, String content, UUID parentCommentId) {
-        UUID currUserId = authService.providingUserId();
+        UUID currUserId = authServiceImpl.providingUserId();
 
         if(userId.equals(currUserId)){
             throw new RuntimeException("You can't comment on yourself");
@@ -42,7 +40,7 @@ public class CommentService {
         Article article = articleRepo.findById(articleId)
                 .orElseThrow(() -> new RuntimeException("Article not found"));
 
-        User user = userRepo.findById(userId)
+        CustomUser customUser = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Comment commentObj = new Comment();
@@ -50,7 +48,7 @@ public class CommentService {
         //checking one condition that only diff user can comment to each other not same
             //then only we add comment
             commentObj.setArticle(article);
-            commentObj.setUser(user);
+            commentObj.setCustomUser(customUser);
             commentObj.setContent(content);
 
         if (parentCommentId != null) {
@@ -81,19 +79,19 @@ public class CommentService {
     //delete the comment
 
     public ResponseEntity<?> deleteComment(UUID commentId){
-        UUID currWebUserId = authService.providingUserId();
+        UUID currWebUserId = authServiceImpl.providingUserId();
 
         Comment comment = commentRepo.findById(commentId)
                 .orElseThrow(
                         () -> new RuntimeException("Comment doesn't exists")
                 );
 
-        UUID commentOwnerId = comment.getUser().getId();
+        UUID commentOwnerId = comment.getCustomUser().getId();
 
-        User currUser = userRepo.findById(currWebUserId)
+        CustomUser currCustomUser = userRepo.findById(currWebUserId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(commentOwnerId.equals(currWebUserId) || currUser.getRole() == Role.ADMIN){
+        if(commentOwnerId.equals(currWebUserId) || currCustomUser.getRole() == Role.ADMIN){
             commentRepo.deleteById(commentId);
             return new ResponseEntity<>("Successfully Deleted", HttpStatus.OK);
         }else{

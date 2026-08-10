@@ -26,7 +26,7 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    private User user;
+    private CustomUser customUser;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -20,11 +20,11 @@ public class Followers {
 
     @ManyToOne
     @JoinColumn(name = "follower_id", nullable = false)
-    private User follower;  // User who follows
+    private CustomUser follower;  // User who follows
 
     @ManyToOne
     @JoinColumn(name = "following_id", nullable = false)
-    private User following;  // User being followed
+    private CustomUser following;  // User being followed
 
     private LocalDateTime createdAt = LocalDateTime.now();  // Timestamp
 }

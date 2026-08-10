@@ -72,7 +72,7 @@ export default function SignUpPage() {
                 setIsSubmitted(true);
                 navigate("/loginPage", { replace: true });
             } catch (error) {
-                toast.error("User Already Exists ! Please Login"+error.response?.data);
+                toast.error("User Already Exists ! Please Login");
             }
         } else {
             setIsSubmitted(false);

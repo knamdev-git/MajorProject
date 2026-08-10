@@ -52,20 +52,22 @@ public class SecurityConfig {
 
     }
 
-    //we want that our authentication provider should be our own customised not default
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-        provider.setUserDetailsService(userDetailsService);
-
-        return provider;
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+//    //we want that our authentication provider should be our own customised not default
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+//        provider.setUserDetailsService(userDetailsService);
+//
+//        return provider;
+//    }
+
+
 
 }

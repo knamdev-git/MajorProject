@@ -2,17 +2,15 @@ package com.kanha.Medium_backend.Service;
 
 import com.kanha.Medium_backend.Repository.ArticleRepo;
 import com.kanha.Medium_backend.Repository.UserRepo;
+import com.kanha.Medium_backend.Service.Implements.AuthServiceImpl;
 import com.kanha.Medium_backend.model.Article;
 import com.kanha.Medium_backend.model.Role;
-import com.kanha.Medium_backend.model.User;
+import com.kanha.Medium_backend.model.CustomUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,21 +24,21 @@ public class ArticleService {
     UserRepo userRepo;
 
     @Autowired
-    AuthService authService;
+    AuthServiceImpl authServiceImpl;
 
     // add article
 
     public ResponseEntity<?> addArticle(Article article) {
 
         //get the user id -> jisme ham article store karna chahte h
-        UUID id = authService.providingUserId();
+        UUID id = authServiceImpl.providingUserId();
 
         //ab us id se ham poora User find karte h
-        User user = userRepo.findById(id).get(); // .get() -> try karo Optional ke andar jo object h use return karo
+        CustomUser customUser = userRepo.findById(id).get(); // .get() -> try karo Optional ke andar jo object h use return karo
 
         //then us user ko article me store karte hai or ye map ho jata h Many To One ke form me
         try {
-            article.setUser(user);
+            article.setCustomUser(customUser);
             articleRepo.save(article);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
@@ -64,15 +62,15 @@ public class ArticleService {
                                 new RuntimeException("Article not Existing")
                 );
 
-            article1.setUser(article.getUser());
+            article1.setCustomUser(article.getCustomUser());
             article1.setTitle(article.getTitle());
             article1.setContent(article.getContent());
             article1.setTags(article.getTags());
 
         try {
-            UUID currentUserId = authService.providingUserId();
-            User user = userRepo.findById(currentUserId).get();
-            article1.setUser(user);
+            UUID currentUserId = authServiceImpl.providingUserId();
+            CustomUser customUser = userRepo.findById(currentUserId).get();
+            article1.setCustomUser(customUser);
 
             articleRepo.save(article1);
             System.out.println("Successfully updated");
@@ -83,10 +81,10 @@ public class ArticleService {
     }
 
     public ResponseEntity<?> deleteArticle(UUID id) {
-        User user = userRepo.findById(authService.providingUserId()).get();
+        CustomUser customUser = userRepo.findById(authServiceImpl.providingUserId()).get();
 
-        UUID userStoredInCurrentArticleId = articleRepo.findById(id).get().getUser().getId();
-        if((user.getId().equals(userStoredInCurrentArticleId)) || (user.getRole() == Role.ADMIN)){
+        UUID userStoredInCurrentArticleId = articleRepo.findById(id).get().getCustomUser().getId();
+        if((customUser.getId().equals(userStoredInCurrentArticleId)) || (customUser.getRole() == Role.ADMIN)){
             articleRepo.deleteById(id);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         }else{
@@ -98,15 +96,15 @@ public class ArticleService {
     public ResponseEntity<List<Article>> getArticlesofCurrentUser() {
         //remember that we'll fetch only those articles which is to be returned by 1 own user
 
-        User currLoggedInUser = null;
+        CustomUser currLoggedInCustomUser = null;
         try {
-            currLoggedInUser = userRepo.findById(authService.providingUserId()).get();
+            currLoggedInCustomUser = userRepo.findById(authServiceImpl.providingUserId()).get();
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         //now we'll check the articles written by him
-        List<Article> list = currLoggedInUser.getArticles();
+        List<Article> list = currLoggedInCustomUser.getArticles();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

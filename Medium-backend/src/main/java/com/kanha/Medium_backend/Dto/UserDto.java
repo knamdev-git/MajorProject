@@ -1,6 +1,7 @@
 package com.kanha.Medium_backend.Dto;
 
 import com.kanha.Medium_backend.model.Role;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

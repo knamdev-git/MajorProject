@@ -1,11 +1,10 @@
 package com.kanha.Medium_backend.controller;
 
 import com.kanha.Medium_backend.Service.UserService;
-import com.kanha.Medium_backend.model.User;
+import com.kanha.Medium_backend.model.CustomUser;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class UserApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/profile")
-    public ResponseEntity<List<User>> getProfileAllUsers() {
+    public ResponseEntity<List<CustomUser>> getProfileAllUsers() {
         return userService.getProfileAllUsers();
     }
 
@@ -43,13 +42,13 @@ public class UserApi {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USERS')")
     @GetMapping("profile/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<CustomUser> getUserById(@PathVariable UUID id) {
 //        return new ResponseEntity<>(userService.getProfileById(id).getBody(), userService.getProfileById(id).getStatusCode());
-        User user = userService.getProfileById(id);
-        if (user != null)
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
+        CustomUser customUser = userService.getProfileById(id);
+        if (customUser != null)
+            return new ResponseEntity<>(customUser, HttpStatus.FOUND);
         else
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            return new ResponseEntity<>(customUser, HttpStatus.CREATED);
 //        return (userService.getProfileById(id).getBody(), userService.getProfileById(id).getStatusCode());
 
     }
@@ -58,10 +57,10 @@ public class UserApi {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("profile")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User resultantUser = userService.addUser(user);
-        if(resultantUser != null){
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<CustomUser> addUser(@RequestBody CustomUser customUser) {
+        CustomUser resultantCustomUser = userService.addUser(customUser);
+        if(resultantCustomUser != null){
+            return new ResponseEntity<>(customUser, HttpStatus.CREATED);
         }else{
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -72,8 +71,8 @@ public class UserApi {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USERS')")
     @PutMapping("profile/{id}")
-    public ResponseEntity<?> updateProfile(@RequestBody User user, @PathVariable UUID id) {
-        ResponseEntity<?> user1 = userService.updateUser(user, id);
+    public ResponseEntity<?> updateProfile(@RequestBody CustomUser customUser, @PathVariable UUID id) {
+        ResponseEntity<?> user1 = userService.updateUser(customUser, id);
         return new ResponseEntity<>(user1.getBody(), user1.getStatusCode()); //get body send you the message
     }
 

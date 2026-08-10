@@ -7,5 +7,5 @@ import java.util.UUID;
 
 @Repository
 public interface LikeRepo extends JpaRepository<Like, Long> {
-    Like findByArticleIdAndUserId(UUID articleId, UUID currUserOperatingTheSite);
+    Like findByArticleIdAndCustomUserId(UUID articleId, UUID currUserOperatingTheSite);
 }
