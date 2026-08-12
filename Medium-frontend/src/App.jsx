@@ -10,6 +10,7 @@ import Home from './components/Home'
 import NotFound from './components/404/NotFound'
 import SignInPage from "./components/LoginComponent/SignInPage.jsx";
 import SignUpPage from "./components/LoginComponent/SignUpPage.jsx";
+import PublicRoute from "./components/customRoute/PublicRoute.jsx";
 
 const App = () => {
     const [theme, setTheme] = useState("bg-light text-black");
@@ -27,8 +28,17 @@ const App = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/getArticles" element={<ViewArticles />} />
-                    <Route path="/loginPage" element={<SignInPage />} />
-                    <Route path="/register" element={<SignUpPage />} />
+                    <Route path="/loginPage" element={
+                        <PublicRoute>
+                            <SignInPage />
+                        </PublicRoute>
+                    } />
+
+                    <Route path="/register" element={
+                        <PublicRoute>
+                            <SignUpPage />
+                        </PublicRoute>
+                    } />
 
 
                     <Route path='*' element={<NotFound />} />

@@ -12,7 +12,7 @@ const SignInPage = () => {
     });
 
     //using authcontext here
-    const { setUser } = useAuth();
+    const { login } = useAuth();
 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const SignInPage = () => {
                     console.log("User found by hitting controller -> " , user);
 
                     toast.success("Logged in Successfully")
-                    setUser(user);
+                    login(user)
                     navigate('/home', { replace: true });
                 }else{
                     toast.error("Something went wrong")
