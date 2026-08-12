@@ -1,17 +1,43 @@
-import React from 'react';
-import './App.css';
-import Footer from './Footer';
-import Header from './Header';
-import Mid from './Mid';
+import React from 'react'
+import Header from './components/Header'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-     <Header className="header"/>
-      <Mid className="main-content"/>
-      <Footer className="footer"/>
-    </div>
-  );
+import About from './components/About'
+import Contact from './components/Contact'
+import ViewArticles from './components/ViewArticles'
+import Home from './components/Home'
+import NotFound from './components/404/NotFound'
+import SignInPage from "./components/LoginComponent/SignInPage.jsx";
+import SignUpPage from "./components/LoginComponent/SignUpPage.jsx";
+
+const App = () => {
+    const [theme, setTheme] = useState("bg-light text-black");
+    console.log("This is the app's theme", theme);
+
+    return (
+        <>
+            <Header theme={theme} setTheme={setTheme} />
+            <div className={`h-screen w-screen ${theme}`}>
+                <Routes>
+                    {/* Default route */}
+                    <Route path="/" element={<Navigate to={'/home'} />} />
+
+                    <Route path='/home' element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/getArticles" element={<ViewArticles />} />
+                    <Route path="/loginPage" element={<SignInPage />} />
+                    <Route path="/register" element={<SignUpPage />} />
+
+
+                    <Route path='*' element={<NotFound />} />
+                </Routes>
+
+
+            </div>
+        </>
+    )
 }
 
-export default App;
+export default App

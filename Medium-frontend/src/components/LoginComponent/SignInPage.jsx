@@ -48,7 +48,7 @@ const SignInPage = () => {
 
                     toast.success("Logged in Successfully")
                     setUser(user);
-                    navigate('/home');
+                    navigate('/home', { replace: true });
                 }else{
                     toast.error("Something went wrong")
                 }
