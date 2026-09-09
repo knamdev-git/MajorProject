@@ -11,6 +11,7 @@ import NotFound from './components/404/NotFound'
 import SignInPage from "./components/LoginComponent/SignInPage.jsx";
 import SignUpPage from "./components/LoginComponent/SignUpPage.jsx";
 import PublicRoute from "./components/customRoute/PublicRoute.jsx";
+import WritingPad from "./components/writingpad/WritingPad.jsx";
 
 const App = () => {
     const [theme, setTheme] = useState("bg-light text-black");
@@ -32,6 +33,10 @@ const App = () => {
                         <PublicRoute>
                             <SignInPage />
                         </PublicRoute>
+                    } />
+
+                    <Route path="/writeOwnArticle" element={
+                            <WritingPad/>
                     } />
 
                     <Route path="/register" element={

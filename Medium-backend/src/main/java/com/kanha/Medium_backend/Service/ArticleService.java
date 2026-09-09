@@ -36,6 +36,7 @@ public class ArticleService {
         //ab us id se ham poora User find karte h
         CustomUser customUser = userRepo.findById(id).get(); // .get() -> try karo Optional ke andar jo object h use return karo
 
+        System.out.println("Role of the user is : "+customUser.getAuthorities());
         //then us user ko article me store karte hai or ye map ho jata h Many To One ke form me
         try {
             article.setCustomUser(customUser);

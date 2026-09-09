@@ -14,9 +14,12 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     @Autowired
     UserRepo userRepo;
 
+
+    CustomUser customUser = new CustomUser();
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Load By Username is working");
+        System.out.println("Load By Username is working and role is : "+customUser.getAuthorities());
 
         return userRepo.findByUsername(username).orElseThrow(() ->
             new UsernameNotFoundException("User not exists")

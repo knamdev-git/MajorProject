@@ -3,6 +3,8 @@ package com.kanha.Medium_backend.controller;
 import com.kanha.Medium_backend.Service.ArticleService;
 import com.kanha.Medium_backend.model.Article;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,9 @@ public class ArticleApi {
     @PreAuthorize("hasAuthority('USERS')")
     @PostMapping("/add")
     public ResponseEntity<?> createArticle(@RequestBody Article article){
-        return articleService.addArticle(article);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(articleService.addArticle(article));
     }
 
     //user make changes in their article

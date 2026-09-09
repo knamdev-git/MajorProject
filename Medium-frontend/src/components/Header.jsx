@@ -6,7 +6,7 @@ import {useState} from 'react'
 import ThemeButton from './ThemeButton/ThemeButton.jsx'
 import {useAuth} from "../context/AuthContext.jsx";
 import {toast} from "react-toastify";
-
+import { SquarePen } from 'lucide-react';
 
 const Header = ({theme, setTheme}) => {
 
@@ -34,8 +34,9 @@ const Header = ({theme, setTheme}) => {
             <Link to='/getArticles'>Explore</Link>
             <ThemeButton theme={theme} setTheme={setTheme}/>
             {user ? (
-                <div className="relative">
-                    <UserCircle size={30} onClick={() => setShowProfile(!showProfile)} className="cursor-pointer bg-gray-300 rounded-full"/>
+                <div className="relative flex gap-3 ">
+                    <SquarePen size={22} onClick={() => navigate('/writeOwnArticle')} className={"cursor-pointer"}/>
+                    <UserCircle size={26} onClick={() => setShowProfile(!showProfile)} className="cursor-pointer bg-gray-300 rounded-full"/>
                     {showProfile && (
                         <div
                             className="absolute right-0 top-10 w-64 bg-white rounded-lg shadow-lg p-4 z-50"> {/* User information */}
